@@ -85,7 +85,7 @@ public class OdsApp {
 
         //kafka
         keyedStream
-                .sinkTo(KafkaUtils.getKafkaSink("tms_ods",args) )
+                .sinkTo(KafkaUtils.getKafkaSink("tms_ods",sourceName,args) )
                 .uid(option + "_ods_app_sink");
     }
     }

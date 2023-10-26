@@ -34,7 +34,7 @@ public class CreateEnvUtils {
         env.setRestartStrategy(RestartStrategies.failureRateRestart(3, Time.days(1),Time.seconds(3)));
         //设置状态后端 ???
         env.getStateBackend();
-        env.getCheckpointConfig().setCheckpointStorage("hdfs:/");
+        env.getCheckpointConfig().setCheckpointStorage("hdfs:/app");
         //设置操作hfds的用户
         //获取命令行参数
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
