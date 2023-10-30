@@ -102,6 +102,12 @@ public class CreateEnvUtils {
                         .startupOptions(StartupOptions.initial())
                         .serverId(serverId)
                         .build();
+            case "config_dim":
+                builder.databaseList("tms_config")
+                        .tableList("tms_config.tms_config_dim)")
+                        .startupOptions(StartupOptions.initial())
+                        .serverId(serverId)
+                        .build();
         }
 
 

@@ -64,8 +64,8 @@ public class KafkaUtils {
                     public String deserialize(byte[] message) throws IOException {
                         if (message != null) {
                             return new String(message);
-
                         }
+                        return null; //todo ?
                     }
 
                     @Override
