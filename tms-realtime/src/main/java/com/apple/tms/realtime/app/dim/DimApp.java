@@ -97,7 +97,7 @@ public class DimApp {
         // todo 将主流和广播流进行关联 --connect
         BroadcastConnectedStream<JSONObject, String> connect = jsonObjDS.connect(broadcastDS);
 
-        SingleOutputStreamOperator<JSONObject> dimDS = connect.process(mapStateDescriptor);
+        SingleOutputStreamOperator<JSONObject> dimDS = connect.process(mapStateDescriptor,args);
         // todo 对关联之后的数据进行处理
         jsonObjDS
         // todo 将维度数据保存到Hbase中
