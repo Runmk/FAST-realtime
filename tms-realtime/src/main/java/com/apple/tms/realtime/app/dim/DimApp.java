@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.apple.tms.realtime.beans.TmsConfigDimBean;
 import com.apple.tms.realtime.common.TmsConfig;
 import com.apple.tms.realtime.func.MyBroadcastProcessFunction;
+import com.apple.tms.realtime.func.dimSinkFunction;
 import com.apple.tms.realtime.utils.CreateEnvUtils;
 import com.apple.tms.realtime.utils.HbaseUtil;
 import com.apple.tms.realtime.utils.KafkaUtils;
@@ -25,6 +26,7 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import com.alibaba.fastjson.JSON;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
+import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.util.Collector;
 import org.eclipse.jetty.util.StringUtil;
 
@@ -97,12 +99,14 @@ public class DimApp {
         // todo 将主流和广播流进行关联 --connect
         BroadcastConnectedStream<JSONObject, String> connect = jsonObjDS.connect(broadcastDS);
 
-        SingleOutputStreamOperator<JSONObject> dimDS = connect.process(mapStateDescriptor,args);
+        SingleOutputStreamOperator<JSONObject> dimDS = connect.process(
+                new MyBroadcastProcessFunction(mapStateDescriptor,args)
+        );
         // todo 对关联之后的数据进行处理
-        jsonObjDS
+        dimDS.print();
         // todo 将维度数据保存到Hbase中
         //
-
+        dimDS.addSink(new DimSinkFunction())
         env.execute();
     }
 }

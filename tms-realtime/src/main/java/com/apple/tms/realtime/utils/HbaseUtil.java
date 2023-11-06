@@ -58,4 +58,28 @@ public class HbaseUtil {
         }
 
     }
+
+    //向HBase 插入一条数据
+    public static void putRow(String namespace ,String tableName,Put put) {
+        BufferedMutator mutator = null;
+
+        try {
+            BufferedMutatorParams params
+                    = new BufferedMutatorParams(TableName.valueOf(namespace,tableName));
+            params.writeBufferSize(5 * 1024 * 1024);
+            params.setWriteBufferPeriodicFlushTimeoutMs(3000L);
+            mutator = conn.getBufferedMutator(params);
+            mutator.mutate(put);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (mutator != null) {
+                try {
+                    mutator.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
